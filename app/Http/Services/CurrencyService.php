@@ -13,11 +13,10 @@ class CurrencyService
         $rates = $currencies['rates'];
 
         foreach ($rates as $currencyName => $rate) {
-            
+            \Log::info('Command executed: currencies:update');
             $currency = new Currency;
             $currency->name = $currencyName;
             $currency->rate = $rate;
-            \Log::info('Command executed: currencies:update');
 
             $currency->save();
         }

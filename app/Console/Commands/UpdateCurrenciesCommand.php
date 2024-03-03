@@ -8,7 +8,7 @@ use App\Http\Services\ApiService;
 use App\Http\Controllers\CurrencyController;
 use App\Models\Currency;
 
-class UpdateCurrencies extends Command
+class UpdateCurrenciesCommand extends Command
 {
     /**
      * The name and signature of the console command.

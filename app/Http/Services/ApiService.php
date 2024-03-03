@@ -15,7 +15,6 @@ class ApiService
         $httpClient = new \GuzzleHttp\Client();
         $request =
             $httpClient
-                // ->get('https://www.boredapi.com/api/activity');
                 ->get($this->apiUrl);
         $response = $request->getBody()->getContents();
         return $response;
