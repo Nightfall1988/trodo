@@ -5,7 +5,6 @@
                 <div class="card">
                     <div class="card-body">
                         <div id="buttons">
-                            <button @click="getCurrency('EUR')">EUR</button>
                             <button @click="getCurrency('AUD')">AUD</button>
                             <button @click="getCurrency('GBP')">GBP</button>
                             <button @click="getCurrency('USD')">USD</button>
