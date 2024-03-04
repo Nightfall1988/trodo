@@ -18461,7 +18461,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   computed: {
     sortedCurrencyRates: function sortedCurrencyRates() {
-      return _toConsumableArray(this.currencyRates); // Create a copy to avoid mutating the original array
+      return _toConsumableArray(this.currencyRates);
     }
   },
   methods: {

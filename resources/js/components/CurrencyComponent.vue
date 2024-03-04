@@ -78,7 +78,7 @@
 
     computed: {
     sortedCurrencyRates() {
-        return [...this.currencyRates]; // Create a copy to avoid mutating the original array
+        return [...this.currencyRates];
         },
     },
 
