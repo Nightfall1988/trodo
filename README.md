@@ -29,4 +29,4 @@ To setup this project open a terminal window in Trodo directory.
     - php artisan serve
 
 The project should be set up at this point.
-The scheduler is set up so that the currency updates are happening in 23:59, but this can easily bechanged.
+The scheduler is set up so that the currency updates are happening in 23:59, but this can easily be changed.
