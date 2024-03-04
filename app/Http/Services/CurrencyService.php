@@ -3,6 +3,8 @@ namespace App\Http\Services;
 use Illuminate\Http\Request;
 use App\Models\Currency;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class CurrencyService
 {
     public function saveCurrencies($jsonData)
@@ -22,8 +24,21 @@ class CurrencyService
     }
 
     public function createTable(string $currency) {
-        $currencies = Currency::where('name', $currency)->get();
-        return $currencies;
+
+        $currencies = Currency::where('name', $currency)->paginate(5);
+
+        $paginator = new LengthAwarePaginator(
+            $currencies->items(),
+            $currencies->total(),
+            $currencies->perPage(),
+            $currencies->currentPage(),
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+    
+        return $paginator;
+
+        // $currencies = Currency::where('name', $currency)->paginate(5);
+        // return $currencies;
     }
 
 

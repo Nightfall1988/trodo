@@ -32,6 +32,13 @@
                 <p>Minimum: {{ parseFloat(this.minRate).toFixed(2) }}, Maximum: {{ parseFloat(this.maxRate).toFixed(2) }}, Average: {{ parseFloat(this.avgRate).toFixed(2) }}</p>
             </div>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" v-for="page in pagination.links" :key="page.label" :class="{ 'active': page.active }">
+                    <a class="page-link" @click="fetchData(page.url)">{{ page.label }}</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </template>
 
@@ -44,7 +51,8 @@
             currencyRates: [],
             minRate: '',
             maxRate: '',
-            avgRate: ''
+            avgRate: '',
+            pagination: {},
         }
     },
     mounted() {
@@ -59,7 +67,8 @@
                     if (response.data == 0) {
                         this.currencyRates = response.data
                     } else {
-                        this.currencyRates = response.data
+                        this.currencyRates = response.data.data
+                        this.pagination = response.data;
 
                         let rates = []
 
@@ -88,7 +97,30 @@
             
             const average = sum / currencyRates.length; 
             return average;
-        }
-    }
+        },
+
+        fetchData(url) {
+            axios.post(url)
+                .then(response => {
+                    this.currencyRates = response.data.data;
+                    this.pagination = response.data;
+
+                    console.log(this.pagination.links)
+                    let rates = [];
+
+                    for (let i = 0; i < this.currencyRates.length; i++) {
+                        rates.push(this.currencyRates[i].rate);
+                    }
+
+                    this.minRate = Math.min(...rates);
+                    this.maxRate = Math.max(...rates);
+                    this.avgRate = this.getAverage(this.currencyRates);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+            },
+        },
+
 }
 </script>

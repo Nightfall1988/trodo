@@ -38,4 +38,10 @@ class CurrencyController extends Controller
         $this->currencyService->saveCurrencies($jsonData);
     }
 
+    public function getPaginatedData(string $currency)
+    {
+        $data = Currency::where('name', '=', $currency);
+        return response()->json($data);
+    }
+
 }
