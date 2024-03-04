@@ -7,7 +7,7 @@ class ApiService
     private string $apiUrl;
 
     public function __construct() {
-        $this->apiUrl = env('API_BASE_URL') . 'EUR&apiKey=' . env('API_KEY');
+        $this->apiUrl = env('API_BASE_URL') . '&apiKey=' . env('API_KEY');
     }
 
         public function updateCurrencies() {

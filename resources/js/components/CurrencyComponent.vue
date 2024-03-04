@@ -11,35 +11,50 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                    <p class="rate-info">Last updated: {{ this.latestDate }}</p>
+                </div>
             </div>
-            <div id="table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th @click="sortTable()">Date</th>
-                            <th>EUR to {{ this.currency }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="currency in sortedCurrencyRates" :key="currency.date">
-                            <td>{{ formatDate(currency.created_at) }}</td>
-                            <td>{{ parseFloat(currency.rate).toFixed(2) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+
+            <div v-if="this.currencyRates.length > 0">
+                <div>
+                    <div id="table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th @click="sortTable()">Date</th>
+                                    <th>EUR to {{ this.currency }}</th>
+                                </tr>
+                            </thead>
+                                <tbody>
+                                    <tr v-for="currency in sortedCurrencyRates" :key="currency.date">
+                                        <td>{{ formatDate(currency.created_at) }}</td>
+                                        <td>{{ parseFloat(currency.rate).toFixed(2) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <div class="rate-info">
+                    <p>
+                        Minimum: {{ parseFloat(this.minRate).toFixed(2) }} {{ this.currency }}, 
+                        Maximum: {{ parseFloat(this.maxRate).toFixed(2) }} {{ this.currency }}, 
+                        Average: {{ parseFloat(this.avgRate).toFixed(2) }}  {{ this.currency }}
+                    </p>
+                </div>
+                    <nav aria-label="navigation">
+                    <ul class="pagination">
+                        <li class="page-item" v-for="page in pagination.links" :key="page.label" :class="{ 'active': page.active }">
+                            <a class="page-link" @click="fetchData(page.url)">{{ page.label }}</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <div id="rate-info">
-                <p>Minimum: {{ parseFloat(this.minRate).toFixed(2) }}, Maximum: {{ parseFloat(this.maxRate).toFixed(2) }}, Average: {{ parseFloat(this.avgRate).toFixed(2) }}</p>
+                <div id="no-data-message" v-else>
+                    <p> There is no data about this currency right now </p>
+                </div>
             </div>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item" v-for="page in pagination.links" :key="page.label" :class="{ 'active': page.active }">
-                    <a class="page-link" @click="fetchData(page.url)">{{ page.label }}</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
 </template>
 
 <script>
@@ -53,7 +68,8 @@
             maxRate: '',
             avgRate: '',
             pagination: {},
-            sortOrder: 'asc'
+            sortOrder: 'asc',
+            lastUpdated: '',
         }
     },
     mounted() {
@@ -73,17 +89,32 @@
             axios.post('/get-rates/' + currency)
                 .then((response) => {
                     if (response.data == 0) {
-                        this.currencyRates = response.data
                     } else {
                         this.currencyRates = response.data.data
                         this.pagination = response.data;
 
                         let rates = []
 
+                        let latestDate = null;
+
+                        for (const currency of this.currencyRates) {
+                            const currentDate = new Date(currency.created_at);
+
+                            if (!latestDate || currentDate > latestDate) {
+                                latestDate = currentDate;
+                            }
+                        }
+
+                        if (latestDate) {
+                            this.latestDate = this.formatDate(latestDate);
+
+                        } else {
+                            this.latestDate = 'Never';
+                        }
+
                         for (let i = 0; i < this.currencyRates.length; i++) {
                             rates.push(this.currencyRates[i].rate);
                         }
-
                         this.minRate = Math.min(...rates)
                         this.maxRate = Math.max(...rates)
                         this.avgRate = this.getAverage(this.currencyRates)

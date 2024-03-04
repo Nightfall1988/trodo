@@ -71,7 +71,7 @@ body, h1, h2, h3, p, ul, li, table {
     background-color: #f9f9f9;
   }
   
-  #rate-info {
+  .rate-info {
     display: flex;
     margin-top: 3rem;
     justify-content: center;
@@ -107,4 +107,9 @@ body, h1, h2, h3, p, ul, li, table {
     color: #fff;
     border-color: #007BFF;
   }
-  
+    
+  #no-data-message {
+    justify-content: center;
+    display: flex;
+    margin-top: 2rem;
+  }

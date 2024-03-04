@@ -25,7 +25,7 @@ class CurrencyService
 
     public function createTable(string $currency) {
 
-        $currencies = Currency::where('name', $currency)->paginate(5);
+        $currencies = Currency::where('name', $currency)->paginate(10);
 
         $paginator = new LengthAwarePaginator(
             $currencies->items(),
@@ -36,9 +36,6 @@ class CurrencyService
         );
     
         return $paginator;
-
-        // $currencies = Currency::where('name', $currency)->paginate(5);
-        // return $currencies;
     }
 
 
