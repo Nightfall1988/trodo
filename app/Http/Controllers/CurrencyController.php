@@ -29,7 +29,7 @@ class CurrencyController extends Controller
         }
     }
 
-    public function showTable(string $currency) {
+    public function showTable(string $currency = 'USD') {
         return $this->currencyService->createTable($currency);
     }
 

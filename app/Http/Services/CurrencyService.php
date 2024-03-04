@@ -7,7 +7,6 @@ class CurrencyService
 {
     public function saveCurrencies($jsonData)
     {
-        \Log::info('Save');
         $currencies = json_decode($jsonData, true);
 
         $baseCurrency = $currencies['base'];
@@ -17,6 +16,7 @@ class CurrencyService
             $currency = new Currency;
             $currency->name = $currencyName;
             $currency->rate = $rate;
+
             $currency->save();
         }
     }

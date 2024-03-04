@@ -18440,22 +18440,31 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       currency: '',
-      currencyRates: []
+      currencyRates: [],
+      minRate: '',
+      maxRate: '',
+      avgRate: ''
     };
+  },
+  mounted: function mounted() {
+    this.getCurrency('USD');
   },
   methods: {
     getCurrency: function getCurrency(currency) {
       var _this = this;
-      console.log(currency);
       this.currency = currency;
       axios.post('/get-rates/' + currency).then(function (response) {
         if (response.data == 0) {
           _this.currencyRates = response.data;
         } else {
           _this.currencyRates = response.data;
-          console.log(response.data);
-          // this.recipientCurrency = response.data;
-          // this.recipientMessage =  'Recipient account currency: ' + this.recipientCurrency;
+          var rates = [];
+          for (var i = 0; i < _this.currencyRates.length; i++) {
+            rates.push(_this.currencyRates[i].rate);
+          }
+          _this.minRate = Math.min.apply(Math, rates);
+          _this.maxRate = Math.max.apply(Math, rates);
+          _this.avgRate = _this.getAverage(_this.currencyRates);
         }
       });
     },
@@ -18466,6 +18475,14 @@ __webpack_require__.r(__webpack_exports__);
         year: 'numeric'
       };
       return new Date(date).toLocaleDateString(undefined, options);
+    },
+    getAverage: function getAverage(currencyRates) {
+      var sum = 0;
+      for (var i = 0; i < currencyRates.length; i++) {
+        sum += currencyRates[i].rate;
+      }
+      var average = sum / currencyRates.length;
+      return average;
     }
   }
 });
