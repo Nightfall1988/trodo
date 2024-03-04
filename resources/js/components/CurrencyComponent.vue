@@ -16,12 +16,12 @@
                 <table>
                     <thead>
                         <tr>
-                        <th>Date</th>
-                        <th>EUR to {{ this.currency }}</th>
+                            <th @click="sortTable()">Date</th>
+                            <th>EUR to {{ this.currency }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="currency in currencyRates" :key="currency.date">
+                        <tr v-for="currency in sortedCurrencyRates" :key="currency.date">
                             <td>{{ formatDate(currency.created_at) }}</td>
                             <td>{{ parseFloat(currency.rate).toFixed(2) }}</td>
                         </tr>
@@ -53,11 +53,19 @@
             maxRate: '',
             avgRate: '',
             pagination: {},
+            sortOrder: 'asc'
         }
     },
     mounted() {
         this.getCurrency('USD')
     },
+
+    computed: {
+    sortedCurrencyRates() {
+        return [...this.currencyRates]; // Create a copy to avoid mutating the original array
+        },
+    },
+
 
     methods: {
         getCurrency (currency) {
@@ -105,7 +113,6 @@
                     this.currencyRates = response.data.data;
                     this.pagination = response.data;
 
-                    console.log(this.pagination.links)
                     let rates = [];
 
                     for (let i = 0; i < this.currencyRates.length; i++) {
@@ -120,7 +127,18 @@
                     console.error('Error fetching data:', error);
                 });
             },
-        },
 
+
+        sortTable() {
+            this.currencyRates.sort((a, b) => {
+                const dateA = new Date(a.created_at);
+                const dateB = new Date(b.created_at);
+
+                return this.sortOrder === 'desc' ? dateA - dateB : dateB - dateA;
+            });
+
+            this.sortOrder = this.sortOrder === 'desc' ? 'asc' : 'desc';
+        }
+    },
 }
 </script>

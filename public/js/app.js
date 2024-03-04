@@ -18436,6 +18436,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -18444,11 +18450,17 @@ __webpack_require__.r(__webpack_exports__);
       minRate: '',
       maxRate: '',
       avgRate: '',
-      pagination: {}
+      pagination: {},
+      sortOrder: 'asc'
     };
   },
   mounted: function mounted() {
     this.getCurrency('USD');
+  },
+  computed: {
+    sortedCurrencyRates: function sortedCurrencyRates() {
+      return _toConsumableArray(this.currencyRates); // Create a copy to avoid mutating the original array
+    }
   },
   methods: {
     getCurrency: function getCurrency(currency) {
@@ -18491,7 +18503,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(url).then(function (response) {
         _this2.currencyRates = response.data.data;
         _this2.pagination = response.data;
-        console.log(_this2.pagination.links);
         var rates = [];
         for (var i = 0; i < _this2.currencyRates.length; i++) {
           rates.push(_this2.currencyRates[i].rate);
@@ -18502,6 +18513,15 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.error('Error fetching data:', error);
       });
+    },
+    sortTable: function sortTable() {
+      var _this3 = this;
+      this.currencyRates.sort(function (a, b) {
+        var dateA = new Date(a.created_at);
+        var dateB = new Date(b.created_at);
+        return _this3.sortOrder === 'desc' ? dateA - dateB : dateB - dateA;
+      });
+      this.sortOrder = this.sortOrder === 'desc' ? 'asc' : 'desc';
     }
   }
 });
@@ -18542,17 +18562,16 @@ var _hoisted_6 = {
 var _hoisted_7 = {
   id: "table"
 };
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Date", -1 /* HOISTED */);
-var _hoisted_9 = {
+var _hoisted_8 = {
   id: "rate-info"
 };
-var _hoisted_10 = {
+var _hoisted_9 = {
   "aria-label": "Page navigation example"
 };
-var _hoisted_11 = {
+var _hoisted_10 = {
   "class": "pagination"
 };
-var _hoisted_12 = ["onClick"];
+var _hoisted_11 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     onClick: _cache[0] || (_cache[0] = function ($event) {
@@ -18566,11 +18585,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[2] || (_cache[2] = function ($event) {
       return $options.getCurrency('USD');
     })
-  }, "USD")])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "EUR to " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.currency), 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.currencyRates, function (currency) {
+  }, "USD")])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+    onClick: _cache[3] || (_cache[3] = function ($event) {
+      return $options.sortTable();
+    })
+  }, "Date"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "EUR to " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.currency), 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedCurrencyRates, function (currency) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: currency.date
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.formatDate(currency.created_at)), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(parseFloat(currency.rate).toFixed(2)), 1 /* TEXT */)]);
-  }), 128 /* KEYED_FRAGMENT */))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Minimum: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(parseFloat(this.minRate).toFixed(2)) + ", Maximum: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(parseFloat(this.maxRate).toFixed(2)) + ", Average: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(parseFloat(this.avgRate).toFixed(2)), 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("nav", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_11, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.pagination.links, function (page) {
+  }), 128 /* KEYED_FRAGMENT */))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Minimum: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(parseFloat(this.minRate).toFixed(2)) + ", Maximum: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(parseFloat(this.maxRate).toFixed(2)) + ", Average: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(parseFloat(this.avgRate).toFixed(2)), 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("nav", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_10, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.pagination.links, function (page) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["page-item", {
         'active': page.active
@@ -18581,7 +18604,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: function onClick($event) {
         return $options.fetchData(page.url);
       }
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(page.label), 9 /* TEXT, PROPS */, _hoisted_12)], 2 /* CLASS */);
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(page.label), 9 /* TEXT, PROPS */, _hoisted_11)], 2 /* CLASS */);
   }), 128 /* KEYED_FRAGMENT */))])])]);
 }
 
