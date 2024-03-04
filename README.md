@@ -25,7 +25,7 @@ To setup this project open a terminal window in Trodo directory.
 4. Make currency import with this command:
     - php artisan currencies:update
 
-5. Enter command to start server:
+5. Enter command to start the server:
     - php artisan serve
 
 The project should be set up at this point.
