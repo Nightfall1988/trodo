@@ -29,7 +29,7 @@
                                 <tbody>
                                     <tr v-for="currency in sortedCurrencyRates" :key="currency.date">
                                         <td>{{ formatDate(currency.created_at) }}</td>
-                                        <td>{{ parseFloat(currency.rate).toFixed(2) }}</td>
+                                        <td>{{ parseFloat(currency.rate).toFixed(4) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -37,9 +37,9 @@
                     </div>
                 <div class="rate-info">
                     <p>
-                        Minimum: {{ parseFloat(this.minRate).toFixed(2) }} {{ this.currency }}, 
-                        Maximum: {{ parseFloat(this.maxRate).toFixed(2) }} {{ this.currency }}, 
-                        Average: {{ parseFloat(this.avgRate).toFixed(2) }}  {{ this.currency }}
+                        Minimum: {{ parseFloat(this.minRate).toFixed(4) }} {{ this.currency }}, 
+                        Maximum: {{ parseFloat(this.maxRate).toFixed(4) }} {{ this.currency }}, 
+                        Average: {{ parseFloat(this.avgRate).toFixed(4) }}  {{ this.currency }}
                     </p>
                 </div>
                     <nav aria-label="navigation">
