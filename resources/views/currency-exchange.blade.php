@@ -4,7 +4,6 @@
 <div>
     <div>
         <div id='app'>
-            {{ $currencies }}
         <currency-component>
             
         </currency-component>
